@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    /*justify-content: space-between;*/
+    /*padding: 8px 22px 0px 22px;*/
+}
+.name-button {
+    padding: 4px 10px;
+    height: 21px;
+    margin-right: 4px;
+}
+.name-button h6 {
+    font-size: 0.8rem;
+    margin-bottom: 1px;
+}
+.settings {
+    height: 21px;
+    width: 21px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
