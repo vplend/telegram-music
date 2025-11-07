@@ -72,13 +72,18 @@ export async function POST(req: Request) {
 
     try {
         const { url, name, artist, icon, chatId, geniusUrl } = await req.json();
+        
+        console.log("📥 Telegram API: New request", { url, name, artist, chatId });
+        
         if (!chatId) {
+            console.error("❌ Telegram API: No chat_id provided");
             return NextResponse.json(
                 { ok: false, error: "No chat_id" },
                 { status: 400 }
             );
         }
         if (!url) {
+            console.error("❌ Telegram API: Invalid YouTube URL");
             return NextResponse.json(
                 { ok: false, error: "Invalid YouTube URL" },
                 { status: 400 }
@@ -89,20 +94,28 @@ export async function POST(req: Request) {
         const timestamp = Date.now();
         tempOutput = path.join(tmpDir, `${name || "audio"}_${timestamp}.mp3`);
 
+        console.log("⬇️ Starting download:", url);
         await downloadAudio(url, tempOutput);
+        console.log("✅ Download completed:", tempOutput);
 
         let thumbBuffer: Buffer | undefined;
         if (icon) {
             try {
+                console.log("🖼️ Fetching thumbnail:", icon);
                 const res = await fetch(icon);
                 if (res.ok) {
                     const arrayBuffer = await res.arrayBuffer();
                     thumbBuffer = Buffer.from(arrayBuffer);
+                    console.log("✅ Thumbnail loaded");
                 } else {
+                    console.warn(`⚠️ Failed to fetch thumbnail: ${res.status}`);
                 }
             } catch (e) {
+                console.error("❌ Error fetching thumbnail:", e);
             }
         }
+        
+        console.log("📤 Sending audio to Telegram, chatId:", chatId);
         await bot.telegram.sendAudio(
             chatId.toString(),
             {
@@ -115,21 +128,61 @@ export async function POST(req: Request) {
                 ...(thumbBuffer ? { thumb: { source: thumbBuffer } } : {}),
             }
         );
+        console.log("✅ Audio sent successfully to Telegram");
 
         return NextResponse.json({ ok: true, filename: path.basename(tempOutput) });
     } catch (err: unknown) {
+        console.error("❌ Error in /api/telegram:", err);
+
+        let errorMessage = "Unknown error occurred";
+        let statusCode = 500;
+
+        if (err instanceof Error) {
+            errorMessage = err.message;
+            console.error("Error details:", {
+                message: err.message,
+                stack: err.stack,
+                name: err.name
+            });
+            
+            // Специфические ошибки
+            if (err.message.includes("ENOENT")) {
+                errorMessage = "yt-dlp not found or file system error";
+                statusCode = 500;
+                console.error("💥 File system error or yt-dlp not found");
+            } else if (err.message.includes("timeout")) {
+                errorMessage = "Download timeout exceeded";
+                statusCode = 504;
+                console.error("⏱️ Timeout exceeded");
+            } else if (err.message.includes("Invalid YouTube URL")) {
+                errorMessage = "Invalid or unavailable YouTube video";
+                statusCode = 400;
+                console.error("🚫 Invalid YouTube URL");
+            } else if (err.message.includes("Telegram")) {
+                errorMessage = "Failed to send audio to Telegram";
+                statusCode = 502;
+                console.error("📱 Telegram API error");
+            } else if (err.message.includes("403") || err.message.includes("Forbidden")) {
+                errorMessage = "Access denied or video is private";
+                statusCode = 403;
+                console.error("🔒 Access denied");
+            }
+        }
+
         return NextResponse.json(
             {
                 ok: false,
-                error: err instanceof Error ? err.message : String(err),
+                error: errorMessage,
             },
-            { status: 500 }
+            { status: statusCode }
         );
     } finally {
         if (tempOutput && fs.existsSync(tempOutput)) {
             try {
                 await unlinkAsync(tempOutput);
+                console.log("🗑️ Temp file deleted:", tempOutput);
             } catch (e) {
+                console.error("❌ Failed to delete temp file:", e);
             }
         }
     }
