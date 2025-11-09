@@ -1,8 +1,3 @@
-/**
- * API-роут для поиска видео на YouTube
- * GET /api/youtubesearch?query=...
- * Возвращает массив найденных видео (используется только первый результат)
- */
 import youtubeSearch from "youtube-search";
 
 export async function GET(req: Request) {

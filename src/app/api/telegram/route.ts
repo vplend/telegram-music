@@ -1,8 +1,3 @@
-/**
- * API-роут для скачивания аудио с YouTube и отправки в Telegram через yt-dlp
- * POST /api/telegram
- * Принимает: { url, name, artist, icon, chatId }
- */
 import { NextResponse } from "next/server";
 import { Telegraf } from "telegraf";
 import fs from "fs";
