@@ -1,5 +1,3 @@
-// hooks/useSongSearch.ts
-// Кастомный хук для поиска песен через Genius API
 import { useState } from "react";
 
 export interface Song {
@@ -8,6 +6,7 @@ export interface Song {
   artist?: string;
   url?: string;
   year?: string;
+  songId?: string;
 }
 
 export function useSongSearch() {

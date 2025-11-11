@@ -3,19 +3,20 @@
 // Используется в компонентах для отправки аудио по запросу пользователя
 
 interface TelegramProps {
-  request: string; // текст запроса / название песни
-  name: string; // название песни
-  artist: string; // автор песни
-  icon?: string; // иконка песни
-  chatId?: string; // ID чата
-  geniusUrl?: string; // URL страницы на Genius
+    request: string; // текст запроса / название песни
+    name: string; // название песни
+    artist: string; // автор песни
+    icon?: string; // иконка песни
+    chatId?: string; // ID чата
+    geniusUrl?: string; // URL страницы на Genius
+    songId?: string
 }
 
 /**
  * Функция ищет видео на YouTube по запросу и отправляет аудио в Telegram через backend
  * @param {TelegramProps} props - параметры для поиска и отправки
  */
-export default async function sendAudio({ name, artist, icon, request, chatId, geniusUrl }: TelegramProps)  {
+export default async function sendAudio({ name, artist, icon, request, chatId, geniusUrl, songId }: TelegramProps)  {
   try {
     // 1. Получаем ссылку на YouTube видео по запросу
     const searchRes = await fetch(`/api/youtubesearch?query=${encodeURIComponent(request)}`);
@@ -33,7 +34,7 @@ export default async function sendAudio({ name, artist, icon, request, chatId, g
     const tgRes = await fetch("/api/telegram", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: videoUrl, name, artist, icon, chatId, geniusUrl }),
+      body: JSON.stringify({ url: videoUrl, name, artist, icon, chatId, geniusUrl, songId }),
     });
     const tgData = await tgRes.json();
     if (!tgData.ok) throw new Error(tgData.error || "Ошибка отправки в Telegram");

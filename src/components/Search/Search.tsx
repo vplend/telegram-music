@@ -1,8 +1,5 @@
-// Search.tsx
-// Компонент поиска песен через Genius API и отправки аудио в Telegram
-import { useSongSearch } from "@/hooks/useSongSearch";
-// ...
 
+import { useSongSearch } from "@/hooks/useSongSearch";
 import { useState, useRef, useEffect } from 'react';
 import sendAudio from "@/lib/sendAudio"
 import {Input, IconButton, Button, Avatar} from "@telegram-apps/telegram-ui";
@@ -10,11 +7,6 @@ import { Icon16Cancel } from "@telegram-apps/telegram-ui/dist/icons/16/cancel"
 import SongCell from "./SongCell";
 import { useLaunchParams } from "@telegram-apps/sdk-react";
 import Header from "@/components/Header/Header";
-/**
- * Компонент поиска песен через Genius API и отправки аудио в Telegram
- * Показывает результаты поиска, позволяет отправить выбранную песню
- * 
- */
 
 
 function Search() {
@@ -23,7 +15,6 @@ function Search() {
     query,
     setQuery,
     results,
-    error,
     searchSong
   } = useSongSearch();
 
@@ -95,6 +86,7 @@ function Search() {
                 icon: `${item.image}`,
                 chatId: `${chatId}`,
                 geniusUrl: `${item.url}`,
+                songId: `${item.songId}`
             })}
           />
         ))}
