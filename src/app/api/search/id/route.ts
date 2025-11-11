@@ -23,7 +23,6 @@ export async function GET(req: Request) {
 
     const data = await res.json();
     const song = data.response.song;
-    console.log(song)
 
     if (!song || song.length === 0) {
         return Response.json({ error: 'No song found' }, { status: 404 });
@@ -33,7 +32,6 @@ export async function GET(req: Request) {
         title: song.title.replace(/\s*\(.*?\)/g, '').trim(),
         artist: song.artist_names.replace(/\s*\((?!Ft\.).*?\)/g, '').replace(/(Ft\.[^()]*)\([^()]*\)([^()]*)/g, '$1$2').trim(),
         date: song.release_date_for_display,
-        youtubeUrl: song.media.filter((i: { provider: string; }) => i.provider === 'youtube')[0].url ? song.media.filter((i: { provider: string; }) => i.provider === 'youtube')[0].url : null,
         artImage: song.song_art_image_url
     }
 

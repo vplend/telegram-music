@@ -34,6 +34,7 @@ export async function GET(req: Request) {
     image: string;
     url: string;
     year: string;
+    songId: string;
   };
   // Приводим результат к нужному формату
   const songs = hits.map((hit: {
@@ -56,7 +57,7 @@ export async function GET(req: Request) {
         image: result.song_art_image_thumbnail_url || '',
         url: result.url,
         year: result.release_date_components?.year,
-        id: result.id,
+        songId: result.id,
     };
   }).filter((song: Song) => !/\bgenius\b/i.test(song.artist || ''))
 

@@ -6,6 +6,8 @@ import path from "path";
 import { promisify } from "util";
 import { execFile } from "child_process";
 
+
+
 const unlinkAsync = promisify(fs.unlink);
 const execFileAsync = promisify(execFile);
 
@@ -66,9 +68,9 @@ export async function POST(req: Request) {
     let tempOutput: string | undefined = undefined;
 
     try {
-        const { url, name, artist, icon, chatId, geniusUrl } = await req.json();
-        
-        console.log("📥 Telegram API: New request", { url, name, artist, chatId });
+        const { url, name, artist, icon, chatId, songId } = await req.json();
+
+        console.log("📥 Telegram API: New request", { url, name, artist, chatId, songId });
         
         if (!chatId) {
             console.error("❌ Telegram API: No chat_id provided");
@@ -111,6 +113,7 @@ export async function POST(req: Request) {
         }
         
         console.log("📤 Sending audio to Telegram, chatId:", chatId);
+
         await bot.telegram.sendAudio(
             chatId.toString(),
             {
@@ -120,7 +123,10 @@ export async function POST(req: Request) {
             {
                 title: name,
                 performer: artist,
+                caption: `[ℹ️ Подробнее о треке](https://t.me/SmipMusicBot/info?startapp=${songId})`,
+                parse_mode: "MarkdownV2",
                 ...(thumbBuffer ? { thumb: { source: thumbBuffer } } : {}),
+
             }
         );
         console.log("✅ Audio sent successfully to Telegram");
