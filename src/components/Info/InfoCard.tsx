@@ -5,6 +5,7 @@ import {Card, Chip} from "@telegram-apps/telegram-ui";
 import {CardChip} from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import {CardCell} from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
 import React from "react";
+
 import './style.css'
 
 export default function InfoCard() {
