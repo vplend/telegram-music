@@ -8,7 +8,7 @@ import {
   useSignal,
 } from '@telegram-apps/sdk-react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
-import { AppRoot } from '@telegram-apps/telegram-ui';
+import {AppRoot, Chip} from '@telegram-apps/telegram-ui';
 
 import { ErrorBoundary } from '@/components/Root/ErrorBoundary';
 import { ErrorPage } from '@/components/Root/ErrorPage';
@@ -45,12 +45,25 @@ export function Root(props: PropsWithChildren) {
   // the Server Side Rendering. That's why we are showing loader on the server
   // side.
   const didMount = useDidMount();
+  const isDark = useSignal(miniApp.isDark);
 
   return didMount ? (
     <ErrorBoundary fallback={ErrorPage}>
       <RootInner {...props} />
     </ErrorBoundary>
   ) : (
-    <div className="root__loading">Loading</div>
+    <div className="root__loading">
+        <AppRoot
+            appearance={isDark ? 'dark' : 'light'}
+            platform= 'base'
+        >
+            <div className="chips">
+                <Chip></Chip>
+                <Chip></Chip>
+                <Chip></Chip>
+                <Chip></Chip>
+            </div>
+        </AppRoot>
+    </div>
   );
 }
