@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { getSongById, Song } from "@/lib/getSongById";
 import {useLaunchParams} from "@telegram-apps/sdk-react";
-import {Card} from "@telegram-apps/telegram-ui";
+import {Card, Chip} from "@telegram-apps/telegram-ui";
 import {CardChip} from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
 import {CardCell} from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
 import React from "react";
+import './style.css'
 
 export default function InfoCard() {
     const [song, setSong] = useState<Song | null>(null); // ✅ тип указан
@@ -23,7 +24,12 @@ export default function InfoCard() {
 
     if (!song) return (
      <div>
-        фыв
+         <div className="chips">
+             <Chip></Chip>
+             <Chip></Chip>
+             <Chip></Chip>
+             <Chip></Chip>
+         </div>
      </div>
     );
     return (
