@@ -79,6 +79,7 @@ function Search() {
             artist={item.artist}
             url={item.url}
             year={item.year}
+            id = {item.songId}
             onSend={() => sendAudio({
                 request: `${item.title} - ${item.artist}`,
                 name: `${item.title}`,
