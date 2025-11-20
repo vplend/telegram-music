@@ -32,7 +32,8 @@ export async function GET(req: Request) {
         title: song.title.replace(/\s*\(.*?\)/g, '').trim(),
         artist: song.artist_names.replace(/\s*\((?!Ft\.).*?\)/g, '').replace(/(Ft\.[^()]*)\([^()]*\)([^()]*)/g, '$1$2').trim(),
         date: song.release_date_for_display,
-        artImage: song.song_art_image_url
+        artImage: song.song_art_image_url,
+        geniusUrl: song.relationships_index_url
     }
 
     console.log(songJSON)
