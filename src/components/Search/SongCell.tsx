@@ -38,7 +38,7 @@ const SongCell: React.FC<SongCellProps> = ({ image, title, artist, url, onSend, 
                 before={<Image src={image} size={48} alt="cover" />}
                 subtitle={artist}
                 after={
-                    <div>
+                    <div style={{ width: 72 + 'px' }}>
                         <Modal
                             header={<ModalHeader></ModalHeader>}
                             trigger={
@@ -47,12 +47,10 @@ const SongCell: React.FC<SongCellProps> = ({ image, title, artist, url, onSend, 
                                     size="s"
                                 >
                                     <Icon icon="ellipsis_vertical" width={24} height={24} />
-                                    {snackbarVisible && <Snackbar onClose={() => { }}>{title} - {artist} отправлено в телеграм</Snackbar>}
                                 </IconButton>
                             }
                         >
-                            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <InfoCard id={id} />
                             </div>
                         </Modal>
@@ -60,8 +58,10 @@ const SongCell: React.FC<SongCellProps> = ({ image, title, artist, url, onSend, 
                         <IconButton
                             mode="plain"
                             size="s"
+                            onClick={handleClick}
+                            disabled={loading}
                         >
-                            <Icon icon="add_circle_fill" width={24} height={24} />
+                            {loading ? <Spinner size="s" className="spinner" /> : <Icon icon="add_circle_fill" width={24} height={24} />}
                             {snackbarVisible && <Snackbar onClose={() => { }}>{title} - {artist} отправлено в телеграм</Snackbar>}
                         </IconButton>
                     </div>
