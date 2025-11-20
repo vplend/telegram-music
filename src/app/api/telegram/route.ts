@@ -123,7 +123,7 @@ export async function POST(req: Request) {
             {
                 title: name,
                 performer: artist,
-                caption: `[ℹ️ Подробнее о треке](https://t.me/SmipMusicBot/info?startapp=${songId})`,
+                caption: `[Подробнее о треке](https://t.me/SmipMusicBot/info?startapp=${songId})`,
                 parse_mode: "MarkdownV2",
                 ...(thumbBuffer ? { thumb: { source: thumbBuffer } } : {}),
 
