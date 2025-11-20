@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { getSongById, Song } from "@/lib/getSongById";
-import { useLaunchParams } from "@telegram-apps/sdk-react";
-import { Card, Skeleton, Spinner } from "@telegram-apps/telegram-ui";
-import { CardChip } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardChip/CardChip";
-import { CardCell } from "@telegram-apps/telegram-ui/dist/components/Blocks/Card/components/CardCell/CardCell";
+import { openLink, useLaunchParams } from "@telegram-apps/sdk-react";
+import { Avatar, Image, Text, Card, Cell, Skeleton, Spinner, Subheadline, Button, Caption, InlineButtons } from "@telegram-apps/telegram-ui";
 import React from "react";
+import './style.css'
+import Icon from "../Icon/Icon";
+import { InlineButtonsItem } from "@telegram-apps/telegram-ui/dist/components/Blocks/InlineButtons/components/InlineButtonsItem/InlineButtonsItem";
 
 interface InfoCardProps {
     id?: string
@@ -34,34 +35,59 @@ export default function InfoCard({ id }: InfoCardProps) {
     }, [id]);
     if (!song) {
         return (
-            <Spinner size={"s"}/>
+            <Spinner size={"l"} />
         )
     }
     return (
-        <div>
-            <Card type="ambient">
-                < React.Fragment key=".0">
-                    <CardChip readOnly>
-                        {song?.date ? song?.date : 'Дата не найдена'}
-                    </CardChip>
-                    <img
-                        alt="Dog"
-                        src={song?.artImage}
-                        style={{
-                            display: 'block',
-                            height: 300,
-                            objectFit: 'cover',
-                            width: 300
-                        }}
-                    />
-                    <CardCell
-                        readOnly
-                        subtitle={song?.artist}
-                    >
-                        {song?.title}
-                    </CardCell>
-                </React.Fragment>
-            </Card>
+        <div style={{ width: '100vw', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+            <div className="card">
+                <Image
+                    size={96}
+                    style={{ marginRight: 0.8 + 'rem' }}
+                    src={song.artImage}
+                />
+                <div>
+                    {/* <Caption style={{ color: 'var(--tgui--hint_color)', width: 12 + 'rem' }}>
+                        {song.date}
+                    </Caption> <br /> */}
+                    <Text weight="1">
+                        {song.title}
+                    </Text>
+                    <br />
+                    <Caption style={{ color: 'var(--tgui--hint_color)', width: 12 + 'rem' }}>
+                        {song.artist}
+                    </Caption>
+                </div>
+            </div>
+            <Button
+                style={{ marginTop: 0.8 + 'rem' }}
+                size="s"
+                className="button"
+                mode="bezeled"
+                onClick={() => {
+                    if (openLink.isAvailable()) {
+                        openLink(song.geniusUrl, {
+                            tryInstantView: true,
+                        });
+                    }
+                }}
+            >
+                Отправить в чат
+            </Button>
+            <Button
+                size="s"
+                className="button"
+                mode="gray"
+                onClick={() => {
+                    if (openLink.isAvailable()) {
+                        openLink(song.geniusUrl, {
+                            tryInstantView: true,
+                        });
+                    }
+                }}
+            >
+                Открыть текст трека
+            </Button>
         </div>
     );
 }

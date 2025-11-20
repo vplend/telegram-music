@@ -4,6 +4,7 @@ export interface Song {
     artist?: string;
     youtubeUrl?: string;
     date?: string;
+    geniusUrl: string
 }
 
 export async function getSongById(id: string): Promise<Song | null> {

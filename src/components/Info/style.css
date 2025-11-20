@@ -1,0 +1,21 @@
+.card {
+    display: flex;
+    width: 80%;
+    max-width: 22rem;
+    height: auto;
+    background-color: none;
+    border-radius: 1.5rem;
+    align-items: center;
+}
+
+.button {
+    width: 80%;
+    max-width: 22rem;
+    margin-top: 0.5rem;
+}
+
+.button h6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
