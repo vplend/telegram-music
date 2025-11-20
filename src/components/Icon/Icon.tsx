@@ -28,7 +28,7 @@ export default function Icon({ icon, width, height }: IconProps) {
                 </symbol>
             </svg>
 
-            <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}><use href={`#${icon}`} /></svg>
+            <svg viewBox={`0 0 24 24`} width={width} height={height}><use href={`#${icon}`} /></svg>
         </div>
     )
 }
