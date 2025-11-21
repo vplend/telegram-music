@@ -5,6 +5,7 @@ import { Avatar, Image, Text, Card, Cell, Skeleton, Spinner, Subheadline, Button
 import React from "react";
 import './style.css'
 import Icon from "../Icon/Icon";
+import sendAudio from "@/lib/sendAudio";
 import { InlineButtonsItem } from "@telegram-apps/telegram-ui/dist/components/Blocks/InlineButtons/components/InlineButtonsItem/InlineButtonsItem";
 
 interface InfoCardProps {
@@ -12,9 +13,16 @@ interface InfoCardProps {
 }
 
 export default function InfoCard({ id }: InfoCardProps) {
+    const [chatId, setChatId] = useState<string | null>(null);
     const [song, setSong] = useState<Song | null>(null);
     const [startId, setStartId] = useState<string>('');
     const launchParams = useLaunchParams();
+
+    useEffect(() => {
+        if (typeof window !== "undefined" && launchParams?.tgWebAppData?.user?.id) {
+            setChatId(String(launchParams.tgWebAppData.user.id));
+        }
+    }, [launchParams]);
 
     if (!id) {
         console.log('нут')
@@ -33,6 +41,23 @@ export default function InfoCard({ id }: InfoCardProps) {
     useEffect(() => {
         getSongById(id ? id : '').then(setSong);
     }, [id]);
+
+    const handleClick = async () => {
+        try {
+            await sendAudio({
+                request: `${song?.title} - ${song?.artist}`,
+                name: `${song?.title}`,
+                artist: `${song?.artist}`,
+                icon: `${song?.artImage}`,
+                chatId: `${chatId}`,
+                geniusUrl: `${song?.geniusUrl}`,
+                songId: `${id ? id : startId}`
+            });
+        } finally {
+
+        }
+    };
+
     if (!song) {
         return (
             <Spinner size={"l"} />
@@ -41,38 +66,58 @@ export default function InfoCard({ id }: InfoCardProps) {
     return (
         <div style={{ width: '100vw', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <div className="card">
-                <Image
-                    size={96}
-                    style={{ marginRight: 0.8 + 'rem' }}
-                    src={song.artImage}
-                />
-                <div>
-                    {/* <Caption style={{ color: 'var(--tgui--hint_color)', width: 12 + 'rem' }}>
-                        {song.date}
-                    </Caption> <br /> */}
-                    <Text weight="1">
+
+                <div className="title">
+                    <Text caps weight="1">
                         {song.title}
                     </Text>
-                    <br />
-                    <Caption style={{ color: 'var(--tgui--hint_color)', width: 12 + 'rem' }}>
+                    <Caption style={{ color: 'var(--tgui--hint_color)' }}>
                         {song.artist}
                     </Caption>
                 </div>
+                <Image
+                    style={{ marginRight: 0 + 'rem', width: 10 + 'rem', height: 10 + 'rem', borderRadius: 1 + 'rem', marginTop: 0.4 + 'rem' }}
+                    src={song.artImage}
+                />
             </div>
-            <Button
+            <InlineButtons style={{ marginTop: 0.6 + 'rem', width: 10 + 'rem' }}>
+                <InlineButtonsItem
+                    onClick={handleClick}
+                    text="В чат"
+                    mode="bezeled">
+                    <Icon icon="chat" width={24} height={24} />
+                </InlineButtonsItem>
+                <InlineButtonsItem
+                    onClick={() => {
+                        if (openLink.isAvailable()) {
+                            openLink(song.geniusUrl, {
+                                tryInstantView: true,
+                            });
+                        }
+                    }}
+                    text="Текст"
+                    mode="gray">
+                    <Icon icon="text" width={24} height={24} />
+                </InlineButtonsItem>
+            </InlineButtons>
+            {/* <Button
                 style={{ marginTop: 0.8 + 'rem' }}
                 size="s"
                 className="button"
                 mode="bezeled"
                 onClick={() => {
-                    if (openLink.isAvailable()) {
-                        openLink(song.geniusUrl, {
-                            tryInstantView: true,
-                        });
-                    }
+                    sendAudio({
+                        request: `${song.title} - ${song.artist}`,
+                        name: `${song.title}`,
+                        artist: `${song.artist}`,
+                        icon: `${song.artImage}`,
+                        chatId: `${chatId}`,
+                        geniusUrl: `${song.geniusUrl}`,
+                        songId: `${id ? id : startId}`
+                    })
                 }}
             >
-                Отправить в чат
+                Отправить трек в чат
             </Button>
             <Button
                 size="s"
@@ -87,7 +132,7 @@ export default function InfoCard({ id }: InfoCardProps) {
                 }}
             >
                 Открыть текст трека
-            </Button>
+            </Button> */}
         </div>
     );
 }
