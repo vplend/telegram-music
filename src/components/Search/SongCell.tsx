@@ -50,7 +50,7 @@ const SongCell: React.FC<SongCellProps> = ({ image, title, artist, url, onSend, 
                                 </IconButton>
                             }
                         >
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'start', height: 20+'rem'}}>
                                 <InfoCard id={id} />
                             </div>
                         </Modal>
