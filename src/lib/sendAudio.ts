@@ -1,7 +1,3 @@
-// helpers/send-audio.ts
-// Утилита для поиска аудио на YouTube и отправки его в Telegram через backend-роуты
-// Используется в компонентах для отправки аудио по запросу пользователя
-
 interface TelegramProps {
     request: string; // текст запроса / название песни
     name: string; // название песни
@@ -12,13 +8,8 @@ interface TelegramProps {
     songId?: string
 }
 
-/**
- * Функция ищет видео на YouTube по запросу и отправляет аудио в Telegram через backend
- * @param {TelegramProps} props - параметры для поиска и отправки
- */
 export default async function sendAudio({ name, artist, icon, request, chatId, geniusUrl, songId }: TelegramProps)  {
   try {
-    // 1. Получаем ссылку на YouTube видео по запросу
     const searchRes = await fetch(`/api/youtubesearch?query=${encodeURIComponent(request)}`);
     if (!searchRes.ok) throw new Error("Ошибка поиска видео");
 
@@ -30,7 +21,6 @@ export default async function sendAudio({ name, artist, icon, request, chatId, g
     const videoUrl = searchData[0].link
     console.log(videoUrl)
 
-    // 2. Отправляем аудио в Telegram через backend
     const tgRes = await fetch("/api/telegram", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
