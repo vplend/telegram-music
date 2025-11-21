@@ -73,7 +73,7 @@ export default function InfoCard({ id }: InfoCardProps) {
                     <Text caps weight="1">
                         {song.title}
                     </Text>
-                    <Caption style={{ color: 'var(--tgui--hint_color)' }}>
+                    <Caption style={{ color: 'var(--tgui--hint_color)', textAlign: 'center', width: 14+'rem' }} >
                         {song.artist}
                     </Caption>
                 </div>
