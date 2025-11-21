@@ -78,7 +78,7 @@ export default function InfoCard({ id }: InfoCardProps) {
                     </Caption>
                 </div>
                 <Image
-                    style={{ marginRight: 0 + 'rem', width: 10 + 'rem', height: 10 + 'rem', borderRadius: 1 + 'rem', marginTop: 0.4 + 'rem' }}
+                    style={{ marginRight: '0rem', width: 'calc(10rem - 2px)', height: 'calc(10rem - 2px)', borderRadius: '12px', marginTop: '0.4rem' }}
                     src={song.artImage}
                 />
             </div>
