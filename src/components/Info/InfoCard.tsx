@@ -16,6 +16,7 @@ export default function InfoCard({ id }: InfoCardProps) {
     const [chatId, setChatId] = useState<string | null>(null);
     const [song, setSong] = useState<Song | null>(null);
     const [startId, setStartId] = useState<string>('');
+    const [loading, setLoading] = useState(false);
     const launchParams = useLaunchParams();
 
     useEffect(() => {
@@ -44,6 +45,7 @@ export default function InfoCard({ id }: InfoCardProps) {
 
     const handleClick = async () => {
         try {
+            setLoading(true)
             await sendAudio({
                 request: `${song?.title} - ${song?.artist}`,
                 name: `${song?.title}`,
@@ -54,7 +56,7 @@ export default function InfoCard({ id }: InfoCardProps) {
                 songId: `${id ? id : startId}`
             });
         } finally {
-
+            setLoading(false)
         }
     };
 
@@ -84,8 +86,9 @@ export default function InfoCard({ id }: InfoCardProps) {
                 <InlineButtonsItem
                     onClick={handleClick}
                     text="В чат"
-                    mode="bezeled">
-                    <Icon icon="chat" width={24} height={24} />
+                    mode="bezeled"
+                >
+                    {loading ? <Spinner size="s" className="spinner" /> : <Icon icon="chat" width={24} height={24} />}
                 </InlineButtonsItem>
                 <InlineButtonsItem
                     onClick={() => {
@@ -100,39 +103,6 @@ export default function InfoCard({ id }: InfoCardProps) {
                     <Icon icon="text" width={24} height={24} />
                 </InlineButtonsItem>
             </InlineButtons>
-            {/* <Button
-                style={{ marginTop: 0.8 + 'rem' }}
-                size="s"
-                className="button"
-                mode="bezeled"
-                onClick={() => {
-                    sendAudio({
-                        request: `${song.title} - ${song.artist}`,
-                        name: `${song.title}`,
-                        artist: `${song.artist}`,
-                        icon: `${song.artImage}`,
-                        chatId: `${chatId}`,
-                        geniusUrl: `${song.geniusUrl}`,
-                        songId: `${id ? id : startId}`
-                    })
-                }}
-            >
-                Отправить трек в чат
-            </Button>
-            <Button
-                size="s"
-                className="button"
-                mode="gray"
-                onClick={() => {
-                    if (openLink.isAvailable()) {
-                        openLink(song.geniusUrl, {
-                            tryInstantView: true,
-                        });
-                    }
-                }}
-            >
-                Открыть текст трека
-            </Button> */}
         </div>
     );
 }
