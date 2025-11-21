@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { openLink } from '@telegram-apps/sdk';
 import Icon from "../Icon/Icon";
 import InfoCard from "../Info/InfoCard";
+import './style.css';
 
 type SongCellProps = {
     image?: string;
@@ -19,7 +20,7 @@ type SongCellProps = {
 const SongCell: React.FC<SongCellProps> = ({ image, title, artist, url, onSend, year, id }) => {
     const [loading, setLoading] = useState(false);
     const [snackbarVisible, setSnackbarVisible] = useState(false);
-
+    
     const handleClick = async () => {
         try {
             setLoading(true);
